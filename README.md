@@ -7,7 +7,7 @@ An immersive, scroll-driven landing experience for a fictional luxury property h
 <!-- Replace the screenshots below with captures from a real browser (the CI/headless
      renderer can't load web fonts, the image CDN, or decode the hero/walkthrough video). -->
 
-![Hero](docs/screenshots/02-hero.png)
+
 
 ---
 

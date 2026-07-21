@@ -2,9 +2,9 @@
 
 An immersive, scroll-driven landing experience for a fictional luxury property house, with a built-in **AI concierge**. Built as an experiment in **AI-native development** — the code, imagery, cinematic video, and the concierge each came from a different model, orchestrated and engineered together into one product.
 
-**▶ Live:** [estate-cin.vercel.app](https://estate-cin.vercel.app/) · **Walkthrough video:** _drag your `demo.mp4` into this README on GitHub_
+**▶ Live:** [estate-cin.vercel.app](https://estate-cin.vercel.app/) ·
 
-![Hero](docs/screenshots/02-hero.png)
+![Hero](docs/screenshots/demo_video.mp4)
 
 ---
 

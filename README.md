@@ -4,7 +4,8 @@ An immersive, scroll-driven landing experience for a fictional luxury property h
 
 **▶ Live:** [estate-cin.vercel.app](https://estate-cin.vercel.app/) ·
 
-[▶ Watch Demo](docs/screenshots/demo_video.mp4)
+
+
 
 ---
 

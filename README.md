@@ -51,17 +51,6 @@ Two ideas drive the front end:
 - **Scroll-scrubbed walkthrough** — a stitched, all-intra-encoded video seeked frame-accurately from scroll progress, with a matched first-frame poster (zero pop-in) and a touch-device loop fallback.
 - **Editorial motion throughout** — word-by-word reveals, parallax gallery, masked headline reveals, custom cursor — all on GSAP ScrollTrigger over Lenis smooth scroll.
 
-## Tech stack
-
-| Area | Choice |
-| --- | --- |
-| Framework | Next.js 14 (App Router), TypeScript |
-| Animation | GSAP + ScrollTrigger, Lenis smooth scroll |
-| AI | Vercel AI SDK v7, `@ai-sdk/google` (Gemini) |
-| Styling | styled-jsx + CSS custom properties (no UI kit) |
-| Media | Local `mp4` (H.264) + generated stills |
-| Deploy | Vercel |
-
 ## AI Concierge (RAG)
 
 A retrieval-augmented concierge is built into the site (floating "Ask the concierge" widget).
@@ -79,6 +68,17 @@ In-memory cosine similarity, no external vector DB — the right call for a ~15-
     <td width="50%"><img src="docs/screenshots/10-chatbotpart2.png" width="100%"/><br/><sub>Retrieved residences rendered as cards</sub></td>
   </tr>
 </table>
+
+## Tech stack
+
+| Area | Choice |
+| --- | --- |
+| Framework | Next.js 14 (App Router), TypeScript |
+| Animation | GSAP + ScrollTrigger, Lenis smooth scroll |
+| AI | Vercel AI SDK v7, `@ai-sdk/google` (Gemini) |
+| Styling | styled-jsx + CSS custom properties (no UI kit) |
+| Media | Local `mp4` (H.264) + generated stills |
+| Deploy | Vercel |
 
 ## Running locally
 

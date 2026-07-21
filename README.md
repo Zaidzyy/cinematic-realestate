@@ -50,15 +50,29 @@ A few problems worth calling out, because the fixes are the engineering:
 - **No poster pop.** Video posters are extracted from each clip's own first frame, so the still→video handoff is invisible.
 - **Accessibility.** Honors `prefers-reduced-motion`, keyboard-focusable intro, semantic landmarks.
 
+## AI Concierge (RAG)
+
+A retrieval-augmented concierge is built into the site (floating "Ask the concierge" widget). Ask it in natural language — _"a quiet place with mountain views under $5M"_ — and it recommends from a real residences dataset.
+
+How it works:
+
+- **Embeddings + semantic search** — the residence corpus (`lib/residences.ts`) is embedded with Gemini (`gemini-embedding-001`) and cached in memory; each query is embedded and ranked by cosine similarity (`lib/concierge.ts`).
+- **Grounded streaming generation** — the top matches are injected as context and the answer is streamed token-by-token from `gemini-2.5-flash` via the Vercel AI SDK (`app/api/concierge/route.ts`).
+- **Tool-calling** — a `filter_residences` tool lets the model apply hard constraints (budget, bedrooms, country, view) instead of guessing.
+- Matched residences render as cards in the chat.
+
+Stack: **Vercel AI SDK (v7) + `@ai-sdk/google` (Gemini)**, in-memory cosine similarity (no external vector DB).
+
 ## Running locally
 
 ```bash
 npm install
+cp .env.local.example .env.local   # then add your Google AI Studio key
 npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-Node 18+.
+Node 18+. The concierge needs `GOOGLE_GENERATIVE_AI_API_KEY` (from [Google AI Studio](https://aistudio.google.com/apikey)) in `.env.local` locally and in your Vercel project's Environment Variables in production. The rest of the site runs without it.
 
 ## Asset pipeline
 
@@ -72,9 +86,8 @@ Swap in your own media by dropping files into `/public` and updating `lib/images
 
 ## Roadmap
 
-- **AI concierge** — a chat widget doing retrieval over a residences dataset, streaming responses, with tool-calling for structured filters ("mountain views under $5M").
-- **Semantic search** over listings (embeddings + vector search).
-- **Dynamic residence routes** (`/residences/[slug]`) driven by a data model.
+- **Dynamic residence routes** (`/residences/[slug]`) driven by the data model.
+- Persisted inquiry flow (server action → email/DB).
 
 ## License
 

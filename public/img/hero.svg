@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs>
+    <linearGradient id="sky-hero" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#243027"/><stop offset="0.6" stop-color="#5c6b4a"/><stop offset="1" stop-color="#2c3826"/>
+    </linearGradient>
+    <radialGradient id="sun-hero" cx="62%" cy="34%" r="40%">
+      <stop offset="0" stop-color="#f2d79a" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#f2d79a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vig2-hero" cx="50%" cy="46%" r="80%">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.5"/>
+    </radialGradient>
+    
+    <filter id="grain-hero" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.05"/></feComponentTransfer>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g filter="url(#grain-hero)">
+    <rect width="1600" height="1200" fill="url(#sky-hero)"/>
+    <rect width="1600" height="1200" fill="url(#sun-hero)"/>
+    <polygon points="0,600 480,288 832,552 1152,240 1600,600 1600,1200 0,1200" fill="#3a4a34" opacity="0.9"/>
+    <polygon points="0,768 672,528 1088,720 1600,600 1600,1200 0,1200" fill="#2c3826"/>
+    <polygon points="0,936 1600,864 1600,1200 0,1200" fill="#141a12"/>
+    <rect x="640" y="792" width="320" height="240" fill="#000" opacity="0.35"/>
+    <rect x="688" y="840" width="80" height="96" fill="#f2d79a" opacity="0.55"/>
+    <rect width="1600" height="1200" fill="url(#vig2-hero)"/>
+  </g>
+</svg>

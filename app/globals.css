@@ -1,0 +1,114 @@
+:root {
+  --font-inter: "Inter", system-ui, -apple-system, sans-serif;
+  --font-archivo: "Archivo", system-ui, -apple-system, sans-serif;
+  --bg: #0b0b0c;
+  --bg-soft: #131315;
+  --fg: #f2f0ea;
+  --fg-dim: #a7a49c;
+  --line: rgba(242, 240, 234, 0.14);
+  --accent: #e5563a;
+  --maxw: 1440px;
+  --pad: clamp(20px, 5vw, 72px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  /* `clip` (not `hidden`) contains horizontal overflow WITHOUT creating a
+     scroll container — otherwise it would break position:sticky pinning. */
+  overflow-x: clip;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+.display {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  font-weight: 500;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: var(--pad);
+  padding-right: var(--pad);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  white-space: nowrap;
+}
+.pill:hover {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+.pill--solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.pill--solid:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--bg);
+}
+
+section {
+  position: relative;
+}

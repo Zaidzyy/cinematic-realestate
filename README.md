@@ -1,11 +1,8 @@
 # Kavya Estates — Cinematic Real-Estate Experience
 
-An immersive, scroll-driven landing experience for a fictional luxury property house. Built to explore **motion engineering on the web** and an **AI-native asset pipeline** — every image and video was generated and composited, and the front end is a hand-tuned GSAP + Lenis system.
+An immersive, scroll-driven landing experience for a fictional luxury property house, with a built-in **AI concierge**. Built as an experiment in **AI-native development** — the code, imagery, cinematic video, and the concierge each came from a different model, orchestrated and engineered together into one product.
 
-**Live demo:** _add your Vercel URL_ · **Walkthrough video:** _add `docs/demo.mp4`_
-
-<!-- Replace the screenshots below with captures from a real browser (the CI/headless
-     renderer can't load web fonts, the image CDN, or decode the hero/walkthrough video). -->
+**▶ Live:** [estate-cin.vercel.app](https://estate-cin.vercel.app/) · **Walkthrough video:** _drag your `demo.mp4` into this README on GitHub_
 
 ![Hero](docs/screenshots/02-hero.png)
 
@@ -13,55 +10,70 @@ An immersive, scroll-driven landing experience for a fictional luxury property h
 
 ## Overview
 
-Kavya Estates is an original concept — a design-led property brand whose website is the product. The goal wasn't a template; it was to see how close the browser can get to a film-grade, scroll-controlled experience while staying fast and accessible.
+Kavya Estates is an original concept — a design-led property brand whose website is the product. The goal was two-fold: see how close the browser can get to a film-grade, scroll-controlled experience, and build the whole thing by directing AI tools rather than hand-writing every layer.
 
-Two ideas drive it:
+Two ideas drive the front end:
 
-- **Scroll is the camera.** The hero tilts in 3D and the "walkthrough" section is a real video whose playhead is driven by scroll position — you move *through* the home as you scroll.
-- **AI-native production.** The photography, the interior stills, and the cinematic fly-through were all generated (see [Asset pipeline](#asset-pipeline)). The site is a front end wrapped around a fully synthetic media set.
+- **Scroll is the camera.** The hero tilts in 3D, and the "walkthrough" section is a real video whose playhead is driven by scroll position — you move *through* the home as you scroll.
+- **It thinks.** A retrieval-augmented concierge answers natural-language briefs ("a quiet place with mountain views under $5M") and recommends from a real residences dataset.
+
+## A look around
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/05-walkthrough.png" width="100%"/><br/><sub><b>Walkthrough</b> — a real video scrubbed by scroll position</sub></td>
+    <td width="50%"><img src="docs/screenshots/07-gallery.png" width="100%"/><br/><sub><b>Residences</b> — parallax gallery, generated photography</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/03-statement.png" width="100%"/><br/><sub><b>Statement</b> — two-column editorial with a parallax image</sub></td>
+    <td width="50%"><img src="docs/screenshots/04-services.png" width="100%"/><br/><sub><b>Services</b> — hover-driven list with a live detail panel</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/06-process.png" width="100%"/><br/><sub><b>Process</b> — staggered reveals on a blueprint grid</sub></td>
+    <td width="50%"><img src="docs/screenshots/08-contact.png" width="100%"/><br/><sub><b>Contact</b> — parallax CTA with a masked headline reveal</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/01-intro.png" width="100%"/><br/><sub><b>Intro</b> — animated monogram, load counter, click-to-enter gate</sub></td>
+    <td width="50%"></td>
+  </tr>
+</table>
 
 ## Highlights
 
-- **Intro sequence** — an animated monogram that draws on, a load counter, and a click-to-enter gate that splits open into the site. No flash of unstyled/mid-scroll content (a plain-CSS boot cover paints on the first frame, before JS).
+- **AI concierge** — RAG over a residences corpus: embeddings + semantic search, streaming answers, tool-calling for hard filters (see below).
+- **Intro sequence** — an animated monogram that draws on, a load counter, and a click-to-enter gate that splits open into the site. No flash of unstyled or mid-scroll content.
 - **3D tilt hero** — a looping generated video plane that rotates in perspective and parallaxes to the cursor as you scroll.
-- **Scroll-scrubbed walkthrough** — a stitched, all-intra-encoded video seeked frame-accurately from scroll progress, with a poster that is the video's own first frame (zero pop-in) and a touch-device loop fallback.
-- **Interactive services** — a hover-driven list where a live description panel and stats track the active item.
-- **Editorial motion throughout** — word-by-word reveals, parallax gallery, masked headline reveals, all on GSAP ScrollTrigger over Lenis smooth scroll.
-- **Custom cursor**, reduced-motion aware, layered above the intro.
+- **Scroll-scrubbed walkthrough** — a stitched, all-intra-encoded video seeked frame-accurately from scroll progress, with a matched first-frame poster (zero pop-in) and a touch-device loop fallback.
+- **Editorial motion throughout** — word-by-word reveals, parallax gallery, masked headline reveals, custom cursor — all on GSAP ScrollTrigger over Lenis smooth scroll.
 
 ## Tech stack
 
 | Area | Choice |
 | --- | --- |
 | Framework | Next.js 14 (App Router), TypeScript |
-| Animation | GSAP + ScrollTrigger |
-| Smooth scroll | Lenis (wired into the GSAP ticker) |
+| Animation | GSAP + ScrollTrigger, Lenis smooth scroll |
+| AI | Vercel AI SDK v7, `@ai-sdk/google` (Gemini) |
 | Styling | styled-jsx + CSS custom properties (no UI kit) |
 | Media | Local `mp4` (H.264) + generated stills |
 | Deploy | Vercel |
 
-## Architecture notes (the interesting bits)
-
-A few problems worth calling out, because the fixes are the engineering:
-
-- **Scroll-driving a video.** The walkthrough re-encodes the clip **all-intra (`-g 1`)** so `currentTime` seeks are smooth, then eases the playhead toward a scroll-derived target in a `requestAnimationFrame` loop rather than seeking on every scroll tick.
-- **`position: sticky` + `overflow`.** The pinned walkthrough silently broke until horizontal-overflow control was switched from `overflow-x: hidden` to `overflow-x: clip` — `hidden` creates a scroll container that disables sticky.
-- **First-paint correctness.** Scroll restoration is disabled before paint and a plain-CSS boot cover guarantees the intro is opaque from frame one, independent of when styled-jsx injects its styles.
-- **No poster pop.** Video posters are extracted from each clip's own first frame, so the still→video handoff is invisible.
-- **Accessibility.** Honors `prefers-reduced-motion`, keyboard-focusable intro, semantic landmarks.
-
 ## AI Concierge (RAG)
 
-A retrieval-augmented concierge is built into the site (floating "Ask the concierge" widget). Ask it in natural language — _"a quiet place with mountain views under $5M"_ — and it recommends from a real residences dataset.
-
-How it works:
+A retrieval-augmented concierge is built into the site (floating "Ask the concierge" widget).
 
 - **Embeddings + semantic search** — the residence corpus (`lib/residences.ts`) is embedded with Gemini (`gemini-embedding-001`) and cached in memory; each query is embedded and ranked by cosine similarity (`lib/concierge.ts`).
-- **Grounded streaming generation** — the top matches are injected as context and the answer is streamed token-by-token from `gemini-2.5-flash` via the Vercel AI SDK (`app/api/concierge/route.ts`).
+- **Grounded streaming generation** — the top matches are injected as context and the answer streams token-by-token from `gemini-2.5-flash` (`app/api/concierge/route.ts`).
 - **Tool-calling** — a `filter_residences` tool lets the model apply hard constraints (budget, bedrooms, country, view) instead of guessing.
 - Matched residences render as cards in the chat.
 
-Stack: **Vercel AI SDK (v7) + `@ai-sdk/google` (Gemini)**, in-memory cosine similarity (no external vector DB).
+In-memory cosine similarity, no external vector DB — the right call for a ~15-item corpus.
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/09-chatbot.png" width="100%"/><br/><sub>Natural-language brief with suggested prompts</sub></td>
+    <td width="50%"><img src="docs/screenshots/10-chatbotpart2.png" width="100%"/><br/><sub>Retrieved residences rendered as cards</sub></td>
+  </tr>
+</table>
 
 ## Running locally
 
@@ -74,15 +86,37 @@ npm run build    # production build
 
 Node 18+. The concierge needs `GOOGLE_GENERATIVE_AI_API_KEY` (from [Google AI Studio](https://aistudio.google.com/apikey)) in `.env.local` locally and in your Vercel project's Environment Variables in production. The rest of the site runs without it.
 
-## Asset pipeline
+---
 
-This project is also an experiment in AI-native production. The full media set is synthetic:
+## Build notes — a case study
 
-- **Interior & exterior stills** — generated with an image model (Higgsfield / nano-banana), used for the hero poster, statement, and gallery.
-- **Cinematic fly-through & hero clips** — generated with Kling (text-to-video), then cropped, colour-matched, and crossfade-stitched with `ffmpeg`.
-- **Front-end** — built in an AI-assisted workflow, with the motion system and encoding decisions hand-verified.
+This project was as much an experiment in AI-native development as a design piece. Rather than hand-write every layer, I orchestrated a different model for each part and did the direction, integration, and engineering calls in between. Here's the honest version of how it went.
 
-Swap in your own media by dropping files into `/public` and updating `lib/images.ts`.
+### The pipeline
+
+- **Code & motion system** — built with Claude, with me directing the architecture, debugging, and every animation and encoding decision.
+- **Stills** (hero, statement, gallery) — generated with Higgsfield / nano-banana; the free tier's 10 credits bought five photoreal interiors and exteriors.
+- **Cinematic video** (hero + walkthrough) — generated in Kling, then composited with `ffmpeg`.
+- **Concierge** — Gemini via the Vercel AI SDK for embeddings, streaming generation, and tool-calling.
+
+### What broke, and how I fixed it
+
+The fixes are the engineering:
+
+- **The API video path didn't exist.** Higgsfield's free plan blocks video generation, and Kling's trial credits are usable only in its own app, not via API. So I generated the clips in the Kling app, then did the compositing myself: cropped the watermark, crossfade-stitched two clips into one, and re-encoded **all-intra (`-g 1`) H.264** so scroll-scrubbing can seek to any frame smoothly.
+- **`overflow-x: hidden` silently broke `position: sticky`** — the pinned walkthrough rendered black. `overflow-x: clip` fixes it: `hidden` creates a scroll container that disables sticky; `clip` doesn't.
+- **A reduced-motion guard was disabling *all* animation** — and my headless QA had forced the OS setting off, so I nearly shipped a site that looked completely static for anyone browsing with "reduce motion" enabled. Caught it, removed the kill-switch.
+- **First-paint flash.** On reload the browser restored scroll to mid-page and painted it before the intro. Fixed by disabling scroll restoration pre-paint and adding a plain-CSS boot cover that's opaque on the first frame, independent of when styled-jsx injects its styles.
+- **Poster pop-in.** The scroll video's poster is extracted from the clip's own first frame, so the still→video handoff is invisible; the decoder is also primed early so the first scrub is ready.
+- **Couldn't runtime-test the concierge at build time** (no API key in the build environment), so I compiled it against the real Vercel AI SDK v7 type definitions to guarantee the API usage was correct, and verified the LLM behaviour separately with a key.
+
+### What I'd do differently
+
+- Bundle the generated images locally instead of referencing the generation CDN — removes a dependency I don't control.
+- Precompute embeddings at build time rather than lazily on first request.
+- Do real mobile-device QA earlier; scroll-scrubbed video especially needs it.
+- The tool-calling is present but light — a stronger version would let the model drive multi-constraint search end to end.
+- Honestly: this began as a study of two reference videos before becoming its own concept. Calling it original is fair, but the origin was an exercise, and I'd rather say so.
 
 ## Roadmap
 
